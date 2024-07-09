@@ -9,11 +9,16 @@ const emailtoid=new Map();
 
 io.on('connection', (socket) => {
     console.log(socket.id+' a user connected');
+
+
     socket.on('room:join',data=>{
         idtoemail.set(socket.id,data.email);
         emailtoid.set(data.email,socket.id);
+
         io.to(data.roomid).emit('user:joined',{email:data.email,id:socket.id});
         socket.join(data.roomid);
+        //var room = io.sockets.adapter.rooms[data.roomid+""];
+        //console.log("currently connected users: "+Object.keys(room).length);
         io.to(socket.id).emit('room:join',data);
         console.log(data);
     });
